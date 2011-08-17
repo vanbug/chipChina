@@ -1,0 +1,34 @@
+Convert BAM to SAM
+# samtools view -h -o out.sam in.bam 
+where h=includes header, o=output
+
+Uniquely aligned reads from BAM, outputs uniquely mapped reads (and omit both unmapped and ambiguous ones). Ambiguous reads that can be mapped to different locations with the same score have mapping quality 0 in BWA.
+
+# samtools view -bq 1 aln.bam > aln-reliable.bam
+Unique reads have XT tag set to "U"
+# samtools view bwa.bam | grep "XT:A:U"
+
+
+Solexa : "Phred+33" scheme,
+Illumina : "Phred+64" scheme
+
+
+# BWA SAI index and samse info
+1) Both optimal and suboptimal hits are stored in .sai files, but only
+approximate chromosomal positions are available. Detailed alignments are
+reconstructed by samse and sampe.
+2) Sampe considers suboptimal hits in pairing.
+However, there is no way to generate the detailed alignments for these suboptimal hits(in sam format) using samse, sampe.
+
+#Convert SAM / BAM to fasta / fastq
+latest thread in biostar
+http://biostar.stackexchange.com/questions/6993/convert-bam-file-to-fasta-file
+
+Samtofastq using Picard
+http://picard.sourceforge.net/command-line-overview.shtml#SamToFastq
+
+Samtools and awk to make fasta from sam
+samtools view filename.bam | awk '{OFS="\t"; print ">"$1"\n"$10}' - > filename.fasta
+ 
+Biopython and pysam (code contributed by Brad Chapman)
+http://biostar.stackexchange.com/questions/6993/convert-bam-file-to-fasta-file/6994#6994

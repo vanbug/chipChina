@@ -1,4 +1,9 @@
-# shell script for the bwa alignments
+###################################################################################################################################
+# Shell script for aligning raw fasta files to reference genome using BWA producing .sai index files
+# Author : Sukhdeep Singh
+# Organization : Max Planck Dresden
+###################################################################################################################################
+
 #!bin/sh
 for i in `ls *.clean.fq`
 do

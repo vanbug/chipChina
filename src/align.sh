@@ -1,3 +1,9 @@
+###################################################################################################################################
+# Shell script for aligning raw fasta files to reference genome using Bowtie
+# Author : Sukhdeep Singh
+# Organization : Max Planck Dresden
+###################################################################################################################################
+
 #!bin/sh 
 for i in `ls *.clean.fq`
 do
