@@ -1,5 +1,6 @@
 ###################################################################################################################################
-# R script for analysis of Chip Seq data from the Illumina for bowtie aligned data
+# R script for analysis of Chip Seq data from the Illumina for bowtie 
+aligned data
 # Author : Sukhdeep Singh
 # Organization : Max Planck Dresden
 ###################################################################################################################################
@@ -11,9 +12,16 @@ library('chipseq');
 # declaring variables
 chrs<-c();chipChr<-list();controlChr<-list();
 
+# reading the user inputted file
+control<-readline('Please enter the control location! ')
+control<-gsub('\'','',control)
+chip<-readline('Please enter the chip location! ')
+chip<-gsub('\'','',chip)
+
+
 # reading control and chip data
-control<-readAligned('/projects/globalscratch/sukhi/beijing/data/mapping/runII/sorted/GFP_Ab_Chip.clean.fq.sam.bam.sort.bam',type="BAM");
-chip<-readAligned('/projects/globalscratch/sukhi/beijing/data/mapping/runII/sorted/MEN1_Ab_Chip.clean.fq.sam.bam.sort.bam',type="BAM");
+control<-readAligned(control,type="BAM");
+chip<-readAligned(chip,type="BAM");
 
 # printing info
 print (control);
@@ -25,13 +33,25 @@ chipP=chip[which(is.na(chip@strand)==F)]
 
 # inbuilt filtering for alignQuality occurrenceFilter
 filt1<-chromosomeFilter("chr[0-9XYM]")
-filt2<-alignQualityFilter(10)
+filt2<-alignQualityFilter(25)
 filt3<-occurrenceFilter(withSread=FALSE)
 filt<-compose(filt1,filt2,filt3)
-chipF<-chipP[filt(chipP)]
 controlF<-controlP[filt(controlP)]
+chipF<-chipP[filt(chipP)]
 
-# chromosome specific control data filtering using ShortRead filter - strange bug for chr-1 (picks all with 1 and doublets-10,11 etc)
+# sort chromosome levels 
+sortChr=function(x){
+inputlevel=levels(x)
+sortedchrlevel=paste("chr",sort(as.numeric(gsub("chr","",as.character(inputlevel)))),sep="")
+diff=length(inputlevel)-length(sortedchrlevel)
+if (length(inputlevel)>length(sortedchrlevel)&&(diff!=3)) {print ("Investigate")} 
+else {sortedchrlevel[(length(sortedchrlevel)+1)]="chrX";sortedchrlevel[(length(sortedchrlevel)+1)]="chrY";sortedchrlevel[(length(sortedchrlevel)+1)]="chrM"}
+sortedchrlevel=paste(l,"$",sep='')
+#sortedchrlevel[(length(sortedchrlevel)+1):(length(sortedchrlevel)+3)]=c("chrX","chrY","chrM")
+return (sortedchrlevel)
+}
+
+# chromosome specific control data filtering using ShortRead filter - strange bug for chr-1 (picks all with 1 and doublets-10,11 etc) #EDIT : use $ to end the grep match
 extChr_Control=function(x){
 chrs=paste("chr",x,"$",sep="")
 y=controlF[(chromosomeFilter(chrs))(controlF)]
@@ -67,6 +87,19 @@ controlChr[[22]]=controlF[which(controlF@chromosome=="chrM")]
 chipChr[[20]]=chipF[which(chipF@chromosome=="chrX")]
 chipChr[[21]]=chipF[which(chipF@chromosome=="chrY")]
 chipChr[[22]]=chipF[which(chipF@chromosome=="chrM")]
+
+# simplified chromosome extraction - single chromosome, multiple sample extraction
+extractChr=function(control1level=NULL,control2level=NULL,chip1level=NULL,chip2level=NULL,chip3level=NULL,control1=NULL,control2=NULL,chip1=NULL,chip2=NULL,chip3=NULL){
+if (is.null(control1)==FALSE) {controlChr1=control1[(chromosomeFilter(control1level))(control1)]} else {controlChr1=NULL}
+if (is.null(control2)==FALSE) {controlChr2=control2[(chromosomeFilter(control2level))(control2)]} else {controlChr2=NULL}
+if (is.null(chip1)==FALSE)    {chipChr1=chip1[(chromosomeFilter(chip1level))(chip1)]} else {chipChr1=NULL}
+if (is.null(chip2)==FALSE) {chipChr2=chip2[(chromosomeFilter(chip2level))(chip2)]} else {chipChr2=NULL}
+if (is.null(chip3)==FALSE) {chipChr3=chip3[(chromosomeFilter(chip3level))(chip3)]} else {chipChr3=NULL}
+return (list(control1=controlChr1,control2=controlChr2,chip1=chipChr1,chip2=chipChr2,chip3=chipChr3))
+}
+
+# lappy usage - multiple chromosome, multiple sample extraction
+chrs<-mapply(extractChr,control1level=controllevel,chip1level=chiplevel,MoreArgs=list(control1=control1,chip1=chip1))
 
 # unlisting chip and control chromosome data to remove head list
 controlChr=unlist(controlChr)
@@ -111,4 +144,5 @@ control.cov<-c(control.cov,coverage(control.norm.aln[[i]],width=seqlengths(Mmusc
 
 ##########################################
 # End of Code
+
 
