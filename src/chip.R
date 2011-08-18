@@ -1,6 +1,5 @@
 ###################################################################################################################################
-# R script for analysis of Chip Seq data from the Illumina for bowtie 
-aligned data
+# R script for analysis of Chip Seq data after Shell pre-processingaligned data
 # Author : Sukhdeep Singh
 # Organization : Max Planck Dresden
 ###################################################################################################################################
