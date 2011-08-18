@@ -62,16 +62,23 @@ return (list(control1=controlChr1,control2=controlChr2,chip1=chipChr1,chip2=chip
 
 # lappy usage - multiple chromosome, multiple sample extraction
 extractNucleosome=function(control1level=NULL,chip1level=NULL,control1=NULL,chip1=NULL){
-#chrs<-mapply(extractChr,control1level=controllevel,chip1level=chiplevel,MoreArgs=list(control1=control1,chip1=chip1))
 chrs<-mapply(extractChr,control1level=control1level,chip1level=chip1level,MoreArgs=list(control1=control1,chip1=chip1))
 return (chrs)
 }
+
+# sort chromosome levels
+#controlLevels=sortChr(control@chromosome)
+#chipLevels=sortChr(chip@chromosome)
+
+# extract chip's n control's chromosome specific data
+#extractedChrs<-extractNucleosome(controlLevels,chipLevels,controlP,chipP)
+
 
 #fetching chromosome data using seq
 #controlChrs=extractedChrs[seq(1,length(extractedChrs),by=5)]
 #chipChrs=extractedChrs[seq(3,length(extractedChrs),by=5)]
 
-# unlisting chip and control chromosome data to remove head list
+# unlisting chip and control chromosome data to remove head list - NO NEED WITH CURRENT CODE
 #controlChr=unlist(controlChr)
 #chipChr=unlist(chipChr)
 
@@ -110,7 +117,7 @@ control.cov<-c(control.cov,coverage(control.norm.aln[[i]],width=seqlengths(Mmusc
 print (paste((length(chipChrs)-i),"chromosomes left",sep=''))
 }
 
-
+# JUST WITH INITIAL ANALYSIS - NO NEED OF RECURRANCE
 # plotting function for coverage visualization of each chromosome
 plotChIP.Coverage<-function(x,xlab="Position",ylab="Coverage",main="ChIP Coverage",sub){
 	plot(c(start(x),length(x)),c(runValue(x),1),type="l",col="blue",xlab=xlab,ylab=ylab,main=main,sub=sub)
@@ -133,8 +140,27 @@ plotChr=function(x,type){
 	}
 }
 
-#
+# coverage to track data
+tracks=function(x){return (as(x,"RangedData"))}
+nozero=function(x){return (subset(x,score>0))}
+# obtaining tracks
+chip.cov.Track=lapply(chip.cov,tracks)
+control.cov.Track=lapply(control.cov,tracks)
+chip.cov.no.zero=lapply(chip.cov.Track,nozero)
+control.cov.no.zero=lapply(control.cov.Track,nozero)
 
+# exporting the coverage no zero files as bedGraph files for each chromosome
+exportBed=function(cov.no.zero,bedFileName){
+export(cov.no.zero,bedFileName,"bedGraph")
+}
+# have to run a loop instead of mapply so as to get distinct names for different chrmosome bedFiles
+for (i in 1:length(control.cov.no.zero)){
+exportBed(control.cov.no.zero[[i]],paste(controlLevels[i],".control",sep=''))
+exportBed(chip.cov.no.zero[[i]],paste(chipLevels[i],".chip",sep=''))
+}
+
+# single line production of bed files is, distinct filename feature is sorted.
+#mapply(exportBed,chip.cov.no.zero,list=(bedFileName="chip"))
 ##########################################
 # End of Code
 
