@@ -149,6 +149,8 @@ control.cov.Track=lapply(control.cov,tracks)
 chip.cov.no.zero=lapply(chip.cov.Track,nozero)
 control.cov.no.zero=lapply(control.cov.Track,nozero)
 
+# for cov.no.zero , score is present at chip.cov.zero@values@unlistData@listData$score
+ 
 # exporting the coverage no zero files as bedGraph files for each chromosome
 exportBed=function(cov.no.zero,bedFileName){
 export(cov.no.zero,bedFileName,"bedGraph")
@@ -160,7 +162,18 @@ exportBed(chip.cov.no.zero[[i]],paste(chipLevels[i],".chip",sep=''))
 }
 
 # single line production of bed files is, distinct filename feature is sorted.
-#mapply(exportBed,chip.cov.no.zero,list=(bedFileName="chip"))
+#mapply(exportBed,chip.cov.no.zero,MoreArgs=list(bedFileName="chip"))
+
+# Saving chip and control coverage data as RData for session restore
+save(chip.cov,file="chip.cov.RData")
+save(control.cov,file="control.cov.RData")
+
+# islands - regions of interest are contiguous segments of non-zero coverage - selecting with atleast with 1 read
+chip.islands=mapply(slice,chip.cov,MoreArgs=list(lower=1))
+control.islands=mapply(slice,control.cov,MoreArgs=list(lower=1))
+
+
+
 ##########################################
 # End of Code
 
