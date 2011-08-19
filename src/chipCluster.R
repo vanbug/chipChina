@@ -123,11 +123,8 @@ plotChIP.Coverage<-function(x,xlab="Position",ylab="Coverage",main="ChIP Coverag
 	plot(c(start(x),length(x)),c(runValue(x),1),type="l",col="blue",xlab=xlab,ylab=ylab,main=main,sub=sub)
 }
 
-plotControl.Coverage<-function(x,xlab="Position",ylab="Coverage",
-		main="Control Coverage",sub)
-{
-	plot(c(start(x),length(x)),c(runValue(x),1),type="l",
-			col="red",xlab=xlab,ylab=ylab,main=main,sub=sub)
+plotControl.Coverage<-function(x,xlab="Position",ylab="Coverage",main="Control Coverage",sub){
+	plot(c(start(x),length(x)),c(runValue(x),1),type="l",col="red",xlab=xlab,ylab=ylab,main=main,sub=sub)
 }
 
 # plots coverage for control and chip single or multiple chromosomes, x=chip.cov
@@ -168,11 +165,44 @@ exportBed(chip.cov.no.zero[[i]],paste(chipLevels[i],".chip",sep=''))
 save(chip.cov,file="chip.cov.RData")
 save(control.cov,file="control.cov.RData")
 
-# islands - regions of interest are contiguous segments of non-zero coverage - selecting with atleast with 1 read
-chip.islands=mapply(slice,chip.cov,MoreArgs=list(lower=1))
-control.islands=mapply(slice,control.cov,MoreArgs=list(lower=1))
+# islands - regions of interest are contiguous segments of non-zero coverage - selecting with atleast with 5 (regions less then 5 overlapping reads are not likely to indicate real binding site)
+chip.islands=mapply(slice,chip.cov,MoreArgs=list(lower=5))
+control.islands=mapply(slice,control.cov,MoreArgs=list(lower=5))
 
+# unlisting the top [[1]] list, use to [[1]] or the chromosome name as [['chr1']]
+for (i in 1:length(chip.cov)){
+chip.islands[[i]]<-chip.islands[[i]][[1]]
+control.islands[[i]]<-control.islands[[i]][[1]]
+}
 
+# Views - container for storing a set of views on an arbitrary Vector object called subject. we need to compare chip islands for the same location os control islands on the same reference position.
+#control.islands1=mapply(Views,control.cov,MoreArgs=list(start=start(chip.islands),end=end(chip.islands)))
+for (i in 1:length(chip.islands)){
+control.islands[[i]]<-Views(control.cov[[i]][[1]],start=start(chip.islands[[i]]),end=end(chip.islands[[i]]))
+}
+
+# finding the peak height (maximum number of overlapping reads)
+chip.peaks<-lapply(chip.islands,viewMaxs)
+control.peaks<-lapply(control.islands,viewMaxs)
+
+# making frequency distribution table
+chip.table<-lapply(chip.peaks,table)
+control.table<-lapply(control.peaks,table)
+
+# plotting chip and control distribution tables
+for (i in 1:length(chip.table)){
+jpeg(paste("chr",i,".jpg",sep=''))
+plot(names(chip.table[[i]]),log10(chip.table[[i]]),main="Frequency Distributions",xlab="Peak Height",ylab='Log10 Frequency',type='l',col='red',sub=paste("chr",i))
+lines(names(control.table[[i]]),log10(control.table[[i]]),col="blue")
+legend('topright',legend=c('ChIP','Control'),col=c('red','blue'),lwd=1)
+dev.off()
+}
+# plotting level of enrichment - peak heights
+for (i in 1:length(chip.peaks)){
+jpeg(paste("chr",i,".jpg",sep=''))
+plot(chip.peaks[[i]],control.peaks[[i]],xlim=c(0,400),ylim=c(0,400),pch=20,col="black",main="ChIP vs Control",xlab="ChIP",ylab="Control",sub=paste("chr",i))
+dev.off()
+}
 
 ##########################################
 # End of Code
