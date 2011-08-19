@@ -147,6 +147,19 @@ chip.cov.no.zero=lapply(chip.cov.Track,nozero)
 control.cov.no.zero=lapply(control.cov.Track,nozero)
 
 # for cov.no.zero , score is present at chip.cov.zero@values@unlistData@listData$score
+
+chrs=c(paste('chr',seq(1,19),sep=''),'chrX','chrY','chrM')
+
+# writing bedGraphs using write.table for all chromosomes, x= chip.cov
+bedGraph=function(cov,chrs,type){
+for (i in 1:length(cov)){
+	pf<-runValue(cov[[i]][[1]])>0
+	write.table(cbind(chrs[i],start(cov[[i]][[1]])[pf],
+	format(end(cov[[i]][[1]]),scientific=F)[pf],
+	runValue(cov[[i]][[1]])[pf]),file=paste(type,".bedGraph",sep=''),append=TRUE,sep="\t",
+	quote=FALSE,row.names=FALSE,col.names=FALSE)
+}
+}
  
 # exporting the coverage no zero files as bedGraph files for each chromosome
 exportBed=function(cov.no.zero,bedFileName){
@@ -204,6 +217,9 @@ plot(chip.peaks[[i]],control.peaks[[i]],xlim=c(0,400),ylim=c(0,400),pch=20,col="
 dev.off()
 }
 
+# x= chip.peaks, y=control.peaks
+enrich=function(x,y){return(x>y)}
+mapply(enrich,chip.peaks,MoreArgs=list(y=control.peaks))
 ##########################################
 # End of Code
 
