@@ -221,5 +221,20 @@ dev.off()
 enrich=function(x,y){return(x>y)}
 mapply(enrich,chip.peaks,MoreArgs=list(y=control.peaks))
 ##########################################
+#Dummy code for reading in large bam files
+chip=list()
+chrs=c(paste("chr",seq(1,19),sep=''),paste("chr",c('X','Y','M'),sep=''))
+what=scanBamWhat()
+number=seq(1,27,by=7)
+for (i in 1:(length(number)-1)){
+which<-GRanges((chrs[number[i]:number[i+1]]),ranges=IRanges((number[i]:number[i+1]),c(seqlengths(Mmusculus)[number[i]:number[i+1]])))
+if (i==2|i==3) {which=which[-1]}
+params<-ScanBamParam(which=which,what=what)
+print (which)
+chip[[i]]=readAligned('/projects/globalscratch/sukhi/rotterdam/uniqueRot/s_1_1.fastq.chipseq.bowtie.SR.mm9.sam.srt.bam.unique',type="BAM",param=params)
+}
+
+##########################################
+
 # End of Code
 
