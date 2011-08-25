@@ -222,7 +222,7 @@ enrich=function(x,y){return(x>y)}
 mapply(enrich,chip.peaks,MoreArgs=list(y=control.peaks))
 ##########################################
 #Dummy code for reading in large bam files
-chip=list()
+chip=list(); control=list()
 chrs=c(paste("chr",seq(1,19),sep=''),paste("chr",c('X','Y','M'),sep=''))
 what=scanBamWhat()
 number=seq(1,27,by=7)
