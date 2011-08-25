@@ -232,6 +232,7 @@ if (i==2|i==3) {which=which[-1]}
 params<-ScanBamParam(which=which,what=what)
 print (which)
 chip[[i]]=readAligned('/projects/globalscratch/sukhi/rotterdam/uniqueRot/s_1_1.fastq.chipseq.bowtie.SR.mm9.sam.srt.bam.unique',type="BAM",param=params)
+control[[i]]=readAligned('/projects/globalscratch/sukhi/rotterdam/uniqueRot/s_5_1.fastq.chipseq.bowtie.SR.mm9.sam.srt.bam.unique',type="BAM",param=params)
 }
 
 ##########################################
