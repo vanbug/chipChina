@@ -52,3 +52,17 @@ time java -jar ../trunk/jars/fp4/FindPeaks.jar -aligner SAM -input /projects/glo
 ##
 # UCSC wiggle display
 track type="wiggle_0" name="sample_filtered_compare_chr_chr6_duplicates_subpeaks_len_mode_3" description="sample_filtered_compare_chr_chr6_FL:mode_3_dupe_rds_inc" color=50,50,150 yLineMark=0.0 yLineOnOff=on visibility=2 priority=1 autoScale=on maxHeightPixels=40:40:2
+#############################################################################################
+# Using Egrep
+egrep -w 'chr1|chr2|chr3|chr4|chr5|chr6|chr7|chr8|chr9|chr10|chr11|chr12|chr13|chr14|chr15|chr16|chr17|chr18|chr19|chrX|chrY|chrM' file > file2
+##############
+# findOverlaps example , using chip and control's coverages as IRanges, to find overlaps between the ranges
+a=as(chip.cov,"RangedData");b=as(control.cov,"RangedData")
+c=IRanges(start=a@ranges@unlistData@start[1:10],end=(a@ranges@unlistData@start[1:10]+a@ranges@unlistData@width[1:10])-1) # chip's coverage as IRanges object
+d=IRanges(start=b@ranges@unlistData@start[1:10],end=(b@ranges@unlistData@start[1:10]+b@ranges@unlistData@width[1:10])-1) # control's coverage as IRanges object
+findOverlaps(c,d)
+#############
+#manipulating the rle (coverage objects) using Views
+Views(chip.cov[[1]],2999924:3111123,width=200)
+
+
