@@ -1,0 +1,50 @@
+-------------------------------------------
+M112-GFP_N-GFP.clean.fq
+reads processed: 11455128
+# reads with at least one reported alignment: 10999077 (96.02%)
+# reads that failed to align: 456051 (3.98%)
+Reported 10999077 alignments to 1 output stream(s)
+-------------------------------------------
+GFP_Ab_Chip.clean.fq
+# reads processed: 11867374
+# reads with at least one reported alignment: 11138209 (93.86%)
+# reads that failed to align: 729165 (6.14%)
+Reported 11138209 alignments to 1 output stream(s)
+--
+GFP_Ab_Chip.clean.fq using -m
+# reads processed: 11867374
+# reads with at least one reported alignment: 9315171 (78.49%)
+# reads that failed to align: 712978 (6.01%)
+# reads with alignments suppressed due to -m: 1839225 (15.50%)
+Reported 9315171 alignments to 1 output stream(s)
+time
+
+-------------------------------------------
+M112-GFP_C-GFP.clean.fq
+# reads processed: 11494888
+# reads with at least one reported alignment: 11001662 (95.71%)
+# reads that failed to align: 493226 (4.29%)
+Reported 11001662 alignments to 1 output stream(s)
+--
+Using bowtie -m
+# reads processed: 11494888
+# reads with at least one reported alignment: 9505125 (82.69%)
+# reads that failed to align: 482872 (4.20%)
+# reads with alignments suppressed due to -m: 1506891 (13.11%)
+Reported 9505125 alignments to 1 output stream(s)
+time
+-------------------------------------------
+MEN1_Ab_Chip.clean.fq
+# reads processed: 11838422
+# reads with at least one reported alignment: 11236132 (94.91%)
+# reads that failed to align: 602290 (5.09%)
+Reported 11236132 alignments to 1 output stream(s)
+
+Uniquely Mapped Reads : 9132079
+-------------------------------------------
+M112-GFP_N0-GFP.clean.fq
+# reads processed: 11429165
+# reads with at least one reported alignment: 11012487 (96.35%)
+# reads that failed to align: 416678 (3.65%)
+Reported 11012487 alignments to 1 output stream(s)
+-------------------------------------------

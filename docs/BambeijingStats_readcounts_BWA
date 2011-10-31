@@ -1,0 +1,43 @@
+Non-unique bam files (Fastq->sam->bam)
+
+Detailing GFP_Ab_Chip.clean.fq.sai.sam.bam
+11867374 + 0 in total (QC-passed reads + QC-failed reads)
+11398147 + 0 mapped (96.05%:nan%)
+
+Detailing M112-GFP_C-GFP.clean.fq.sai.sam.bam
+11494888 + 0 in total (QC-passed reads + QC-failed reads)
+11193083 + 0 mapped (97.37%:nan%)
+
+Detailing M112-GFP_N0-GFP.clean.fq.sai.sam.bam
+11429165 + 0 in total (QC-passed reads + QC-failed reads)
+11145624 + 0 mapped (97.52%:nan%)
+
+Detailing M112-GFP_N-GFP.clean.fq.sai.sam.bam
+11455128 + 0 in total (QC-passed reads + QC-failed reads)
+11128105 + 0 mapped (97.15%:nan%)
+
+Detailing MEN1_Ab_Chip.clean.fq.sai.sam.bam
+11838422 + 0 in total (QC-passed reads + QC-failed reads)
+11494200 + 0 mapped (97.09%:nan%)
+----------------------------------------------------------------
+Uniquely aligned bam files (Fastq->sam->bam->sort->unique)
+
+Detailing GFP_Ab_Chip.clean.fq.sai.sam.bam.sort.bam.unique
+9454892 + 0 in total (QC-passed reads + QC-failed reads)
+9454889 + 0 mapped (100.00%:nan%)
+
+Detailing M112-GFP_C-GFP.clean.fq.sai.sam.bam.sort.bam.unique
+9597312 + 0 in total (QC-passed reads + QC-failed reads)
+9597197 + 0 mapped (100.00%:nan%)
+
+Detailing M112-GFP_N0-GFP.clean.fq.sai.sam.bam.sort.bam.unique
+10004676 + 0 in total (QC-passed reads + QC-failed reads)
+10004597 + 0 mapped (100.00%:nan%)
+
+Detailing M112-GFP_N-GFP.clean.fq.sai.sam.bam.sort.bam.unique
+10096453 + 0 in total (QC-passed reads + QC-failed reads)
+10096385 + 0 mapped (100.00%:nan%)
+
+Detailing MEN1_Ab_Chip.clean.fq.sai.sam.bam.sort.bam.unique
+9271411 + 0 in total (QC-passed reads + QC-failed reads)
+9271372 + 0 mapped (100.00%:nan%)
